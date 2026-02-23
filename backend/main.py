@@ -644,10 +644,13 @@ async def generate_speech(
             db,
         )
 
+        # Map Galician (gl) to Portuguese (pt) — closest supported by Qwen3-TTS
+        tts_language = "pt" if data.language == "gl" else data.language
+
         audio, sample_rate = await tts_model.generate(
             data.text,
             voice_prompt,
-            data.language,
+            tts_language,
             data.seed,
             data.instruct,
         )
@@ -716,10 +719,12 @@ async def stream_speech(
 
     voice_prompt = await profiles.create_voice_prompt_for_profile(data.profile_id, db)
 
+    tts_language = "pt" if data.language == "gl" else data.language
+
     audio, sample_rate = await tts_model.generate(
         data.text,
         voice_prompt,
-        data.language,
+        tts_language,
         data.seed,
         data.instruct,
     )
